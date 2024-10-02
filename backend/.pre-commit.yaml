@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.0.5
+    hooks:
+      - id: prettier
+        args: ['--check', '.']
+
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v2.15.0
+    hooks:
+      - id: pylint
+        additional_dependencies: [pylint]
+        args: [--rcfile=.pylintrc]
+
+  - repo: local
+    hooks:
+      - id: run-coverage
+        name: Run Coverage and Check Minimum
+        entry: bash -c 'coverage run -m pytest && coverage report --fail-under=100 --skip-covered'
+        language: system

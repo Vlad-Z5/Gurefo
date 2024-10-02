@@ -1,0 +1,8 @@
+[MASTER]
+ignore=CVS
+
+[MESSAGES CONTROL]
+disable=missing-docstring, import-outside-toplevel
+
+[FORMAT]
+max-line-length=100
