@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from rest_framework import status
-from rest_framework.response import Response
+from django.db.models import Q
 from rest_framework.views import APIView
 from .models import User
 from .serializers import UserSerializer
@@ -13,8 +12,7 @@ class SignUpView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return redirect('login')
-        return render(request, 'signup.html', {'errors': serializer.errors})
+        return redirect('login')
 
 class LoginView(APIView):
     def get(self, request):
@@ -23,13 +21,11 @@ class LoginView(APIView):
     def post(self, request):
         username_or_email = request.data.get('username')
         password = request.data.get('password')
-        try:
-            user = User.objects.get(email=username_or_email) if '@' in username_or_email else User.objects.get(username=username_or_email)
-            if user.check_password(password):
-                # Implement login logic
-                return redirect('home')
-        except User.DoesNotExist:
-            return render(request, 'login.html', {'error': 'Invalid credentials'})
+        user = User.objects.filter(Q(email=username_or_email) |
+        Q(username=username_or_email)).first()
+        if user and user.check_password(password):
+            return redirect('home')
+        return render(request, 'login.html', {'error': 'Invalid credentials, please try again more carefully.'})
 
 class HomeView(APIView):
     def get(self, request):

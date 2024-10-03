@@ -1,5 +1,5 @@
 [MASTER]
-ignore=CVS
+ignore=CVS, migrations, templates
 
 [MESSAGES CONTROL]
 disable=missing-docstring, import-outside-toplevel
